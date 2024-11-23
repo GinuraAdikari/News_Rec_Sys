@@ -13,7 +13,8 @@ public class Main {
             System.out.println("2. Sign In (Admin)");
             System.out.println("3. Log In");
             System.out.println("4. Update User Details");
-            System.out.println("5. Exit");
+            System.out.println("5. Delete User Details");
+            System.out.println("6. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine();  // Consume newline
@@ -31,12 +32,19 @@ public class Main {
                 case 4:
                     System.out.print("Enter your username: ");
                     String username = scanner.nextLine().trim();
-                    UserManager userManager = new UserManager();
                     if (!User.updateUserDetails(username, scanner)) {
                         System.out.println("Failed to update user details. Please try again.");
                     }
                     break;
                 case 5:
+                    System.out.print("Enter your username: ");
+                    username = scanner.nextLine().trim();
+                    userManager = new UserManager();
+                    if (!userManager.deleteUserAccount(username)) {
+                        System.out.println("Failed to delete account. Please try again.");
+                    }
+                    break;
+                case 6:
                     System.out.println("Exiting the system.");
                     return;
                 default:

@@ -53,6 +53,42 @@ public class UserManager {
         }
     }
 
+    public boolean deleteUserAccount(String username) {
+        String sql = "DELETE FROM users WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Confirm with the user before deletion
+            System.out.println("Are you sure you want to delete your account? (yes/no)");
+            Scanner scanner = new Scanner(System.in);
+            String confirmation = scanner.nextLine().trim().toLowerCase();
+
+            if (!confirmation.equals("yes")) {
+                System.out.println("Account deletion cancelled.");
+                return false;
+            }
+
+            // Set the username parameter in the SQL query
+            stmt.setString(1, username);
+
+            // Execute the deletion
+            int rowsDeleted = stmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Account deleted successfully for username: " + username);
+                return true;
+            } else {
+                System.out.println("No account found with the username: " + username);
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error: Unable to delete account. " + e.getMessage());
+            return false;
+        }
+    }
+
+
 
 
     // Login using either username or email
