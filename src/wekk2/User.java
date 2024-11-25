@@ -114,6 +114,7 @@ public class User extends Account {
     }
 
 
+
     // Overridden authenticate method
     @Override
     public boolean authenticate(String password) {

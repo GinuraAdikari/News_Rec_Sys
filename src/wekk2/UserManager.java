@@ -88,6 +88,34 @@ public class UserManager {
         }
     }
 
+    public static void viewProfile(String username) {
+        String sql = "SELECT username, email, age, gender, country, created_at FROM users WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set the username parameter
+            stmt.setString(1, username);
+
+            // Execute the query
+            ResultSet rs = stmt.executeQuery();
+
+            // Check if the user exists and display details
+            if (rs.next()) {
+                System.out.println("\n--- User Profile Details ---");
+                System.out.println("Username: " + rs.getString("username"));
+                System.out.println("Email: " + rs.getString("email"));
+                System.out.println("Age: " + rs.getInt("age"));
+                System.out.println("Gender: " + rs.getString("gender"));
+                System.out.println("Country: " + rs.getString("country"));
+                System.out.println("Account Created At: " + rs.getTimestamp("created_at"));
+            } else {
+                System.out.println("No user found with the username: " + username);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error: Unable to fetch user profile. " + e.getMessage());
+        }
+    }
 
 
 
