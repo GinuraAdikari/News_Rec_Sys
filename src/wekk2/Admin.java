@@ -89,7 +89,9 @@ public class Admin extends Account {
         }
     }
 
-
+    public static boolean resetUserPassword(String username, String newPassword) {
+        return false;
+    }
 
 
     // Getter for email

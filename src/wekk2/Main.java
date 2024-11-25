@@ -45,6 +45,18 @@ public class Main {
                         System.out.println("Failed to delete account. Please try again.");
                     }
                     break;
+                case 66: // Reset User Password
+                    System.out.print("Enter the username of the user to reset the password: ");
+                    String username1 = scanner.nextLine().trim();
+                    System.out.print("Enter the new password: ");
+                    String newPassword = scanner.nextLine();
+                    if (Admin.resetUserPassword(username1, newPassword)) {
+                        System.out.println("Password reset successfully.");
+                    } else {
+                        System.out.println("Failed to reset the password.");
+                    }
+                    break;
+
                 case 6:
                     System.out.print("Enter your username to view profile: ");
                     String loggedInUsername = scanner.nextLine();
@@ -59,6 +71,7 @@ public class Main {
         }
 
     }
+
 
 
     private static void logIn(Scanner scanner) {
