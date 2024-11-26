@@ -41,12 +41,14 @@ public class Admin extends Account {
         System.out.print("Enter username or email to search: ");
         String identifier = scanner.nextLine().trim();
 
-        String sql = "SELECT username, email, age, gender, country FROM users WHERE username = ? OR email = ?";
+        String sql = "SELECT username, email, age, gender, country " +
+                "FROM users " +
+                "WHERE LOWER(username) LIKE LOWER(?) OR LOWER(email) LIKE LOWER(?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, identifier);
-            stmt.setString(2, identifier);
+            stmt.setString(1, "%" + identifier + "%"); // Use wildcards for partial match
+            stmt.setString(2, "%" + identifier + "%"); // Use wildcards for partial match
 
             ResultSet rs = stmt.executeQuery();
 
@@ -64,6 +66,7 @@ public class Admin extends Account {
             System.err.println("Error: Unable to search user. " + e.getMessage());
         }
     }
+
 
     public static void viewAllUsers() {
         String sql = "SELECT username, email, age, gender, country FROM users";
@@ -90,8 +93,18 @@ public class Admin extends Account {
     }
 
     public static boolean resetUserPassword(String username, String newPassword) {
-        return false;
+        String sql = "UPDATE users SET hashed_password = ? WHERE username = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, PasswordManager.hashPassword(newPassword));
+            stmt.setString(2, username);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error resetting password: " + e.getMessage());
+            return false;
+        }
     }
+
 
 
     // Getter for email

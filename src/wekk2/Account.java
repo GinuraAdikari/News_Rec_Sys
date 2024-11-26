@@ -2,12 +2,13 @@ package wekk2;
 
 public abstract class Account {
     protected String username;
-    protected String password;
+    protected String hashedPassword;
 
-    public Account(String username, String password) {
+    public Account(String username, String hashedPassword) {
         this.username = username;
-        this.password = password;
+        this.hashedPassword = hashedPassword; // Pass already-hashed passwords
     }
+
 
     public String getUsername() {
         return username;
